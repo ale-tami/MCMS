@@ -46,9 +46,8 @@
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     EditCreatureViewController *editCreatureVC = (EditCreatureViewController *)[segue destinationViewController];
-    
+    editCreatureVC.creature = [self.creatures objectAtIndex:[self.myTable indexPathForSelectedRow].row];
 }
-
 
 
 - (IBAction)onAdd:(id)sender {
@@ -61,6 +60,14 @@
     [self.creatures addObject:creature];
     [self.myTable reloadData];
     self.addCreatureField.text = nil;
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // note to self: this method executes after prepareForSegue
+    
+//    self.selectedCreature = [self.creatures objectAtIndex:indexPath.row];
 }
 
 
