@@ -12,7 +12,9 @@
 
 @property NSString *name;
 @property NSString *description;
+@property UIImage *image;
+@property NSMutableArray *accesories;
 
-- (instancetype) initWithName:(NSString *) name andDescription:(NSString *) description;
+- (instancetype) initWithName: (NSString *) name withDescription: (NSString *) description andWithImage: (UIImage*) image;
 
 @end

@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "MagicalCreature.h"
 #import "EditCreatureViewController.h"
+#import "BattleViewController.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -21,19 +22,29 @@
 
 @implementation ViewController
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.myTable reloadData];
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     MagicalCreature *magicalCreature1 = [[MagicalCreature alloc]
-                                         initWithName:@"Elf-Panda"
-                                         andDescription:@"Half elf, half panda"];
+                                         initWithName:@"Elf"
+                                         withDescription:@"Never seen an elf before?"
+                                         andWithImage: [UIImage imageNamed:@"elf" ]];
     MagicalCreature *magicalCreature2 = [[MagicalCreature alloc]
                                          initWithName:@"Diablo"
-                                         andDescription:@"Lord of Terror"];
+                                         withDescription:@"Lord of terror!!"
+                                         andWithImage: [UIImage imageNamed:@"diablo"]];
     MagicalCreature *magicalCreature3 = [[MagicalCreature alloc]
-                                         initWithName:@"My Wife"
-                                         andDescription:@"She is magical!!"];
+                                         initWithName:@"Chuck Norris"
+                                         withDescription:@"Cannot describe"
+                                         andWithImage: [UIImage imageNamed:@"chuck" ]];
     
     self.creatures = [NSMutableArray arrayWithObjects:
                       magicalCreature1,
@@ -45,8 +56,14 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    EditCreatureViewController *editCreatureVC = (EditCreatureViewController *)[segue destinationViewController];
-    editCreatureVC.creature = [self.creatures objectAtIndex:[self.myTable indexPathForSelectedRow].row];
+    if ([segue.identifier isEqualToString:@"ShowCreatureSegue"]) {
+        EditCreatureViewController *editCreatureVC = (EditCreatureViewController *)[segue destinationViewController];
+        editCreatureVC.creature = [self.creatures objectAtIndex:[self.myTable indexPathForSelectedRow].row];
+    } else {
+        BattleViewController *bvc = (BattleViewController *)[segue destinationViewController];
+        bvc.creature1 = [self.creatures objectAtIndex:arc4random() %3];
+        bvc.creature2 = [self.creatures objectAtIndex:arc4random() %3];
+    }
 }
 
 
@@ -55,19 +72,13 @@
     [self.addCreatureField resignFirstResponder];
     
     MagicalCreature *creature = [[MagicalCreature alloc]
-                                 initWithName:self.addCreatureField.text                                                    andDescription:@"N/A"];
+                                 initWithName:self.addCreatureField.text
+                                 withDescription:@"N/A"
+                                 andWithImage: nil];
     
     [self.creatures addObject:creature];
     [self.myTable reloadData];
     self.addCreatureField.text = nil;
-}
-
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // note to self: this method executes after prepareForSegue
-    
-//    self.selectedCreature = [self.creatures objectAtIndex:indexPath.row];
 }
 
 
